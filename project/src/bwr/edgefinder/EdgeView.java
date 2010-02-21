@@ -57,20 +57,17 @@ public class EdgeView extends View implements PreviewCallback {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
+		canvas.drawColor(Color.BLACK);
+
 		if (cameraPreviewLock.tryLock()) {
 			try {
 				if (cameraPreview != null && cameraPreviewValid) {
-					canvas.drawColor(Color.BLACK);
 					findEdges(cameraPreview, width, height, canvas, edgePaint);
 					cameraPreviewValid = false;
-				} else {
-					canvas.drawColor(Color.BLACK);
 				}
 			} finally {
 				cameraPreviewLock.unlock();
 			}
-		} else {
-			canvas.drawColor(Color.BLACK);
 		}
 	}
 	
