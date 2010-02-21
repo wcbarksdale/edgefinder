@@ -46,6 +46,15 @@ public class EdgeView extends View implements PreviewCallback {
 		edgePaint.setColor(Color.WHITE);
 	}
 
+	/**
+	 * Native method for calculating the edge image.
+	 * 
+	 * @param source - source image
+	 * @param width - width of the source image
+	 * @param height - height of the source image
+	 * @param canvas - canvas to draw on
+	 * @param paint - paint used to draw edges
+	 */
 	private native void findEdges(byte[] source, int width, int height, Canvas canvas, Paint paint);
 
 	@Override

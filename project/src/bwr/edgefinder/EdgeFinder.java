@@ -26,35 +26,33 @@ import android.view.WindowManager;
 import android.widget.FrameLayout;
 
 public class EdgeFinder extends Activity implements SurfaceHolder.Callback {
-	
+
 	private Camera camera;
 	private EdgeView edgeView;
 	private SurfaceView cameraView;
 	private FrameLayout frameLayout;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-				
-		// Enforce landscape & get the entire screen
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+		// Get the entire screen
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 		edgeView = new EdgeView(this);
-		
+
 		// Create the surface for the camera to draw its preview on
 		cameraView = new SurfaceView(this);
 		cameraView.getHolder().addCallback(this);
 		cameraView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		
+
 		// Setup the layout where the cameraView is completely obscured by the edgeView
 		frameLayout = new FrameLayout(this);
 		frameLayout.addView(cameraView);
 		frameLayout.addView(edgeView);
 		setContentView(frameLayout);
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -62,19 +60,19 @@ public class EdgeFinder extends Activity implements SurfaceHolder.Callback {
 	}
 
 	private void stopCameraPreview() {
-		if(camera != null) {
+		if (camera != null) {
 			camera.setPreviewCallback(null);
 			camera.stopPreview();
 			camera.release();
 			camera = null;
 		}
 	}
-	
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,	int height) {
-        Camera.Parameters parameters = camera.getParameters();
-        parameters.setPreviewSize(width, height); // TODO: check that width, height are a valid camera preview size
-        camera.setParameters(parameters);
-        camera.startPreview();
+
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+		Camera.Parameters parameters = camera.getParameters();
+		parameters.setPreviewSize(width, height); // TODO: check that width, height are a valid camera preview size
+		camera.setParameters(parameters);
+		camera.startPreview();
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
