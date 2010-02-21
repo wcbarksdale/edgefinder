@@ -38,8 +38,6 @@ public class EdgeView extends View implements PreviewCallback {
 	private final Lock cameraPreviewLock = new ReentrantLock();
 	private final Paint edgePaint = new Paint();
 	private int width, height;
-
-	private boolean first = true;
 	
 	public EdgeView(Context context) {
 		super(context);
@@ -59,15 +57,14 @@ public class EdgeView extends View implements PreviewCallback {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		if(first) {
-			canvas.drawColor(Color.BLACK);
-			first = false;
-		} else if (cameraPreviewLock.tryLock()) {
+		if (cameraPreviewLock.tryLock()) {
 			try {
 				if (cameraPreview != null && cameraPreviewValid) {
 					canvas.drawColor(Color.BLACK);
 					findEdges(cameraPreview, width, height, canvas, edgePaint);
 					cameraPreviewValid = false;
+				} else {
+					canvas.drawColor(Color.BLACK);
 				}
 			} finally {
 				cameraPreviewLock.unlock();
@@ -94,11 +91,10 @@ public class EdgeView extends View implements PreviewCallback {
 					}
 					
 					System.arraycopy(data, 0, cameraPreview, 0, length);
-					
-					postInvalidate();
 				}
 			} finally {
 				cameraPreviewLock.unlock();
+				postInvalidate();
 			}
 		}
 	}

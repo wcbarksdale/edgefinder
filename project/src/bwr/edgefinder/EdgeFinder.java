@@ -21,7 +21,6 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 
@@ -43,14 +42,17 @@ public class EdgeFinder extends Activity implements SurfaceHolder.Callback {
 
 		// Create the surface for the camera to draw its preview on
 		cameraView = new SurfaceView(this);
-		cameraView.getHolder().addCallback(this);
 		cameraView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		cameraView.getHolder().addCallback(this);
 
 		// Setup the layout where the cameraView is completely obscured by the edgeView
 		frameLayout = new FrameLayout(this);
 		frameLayout.addView(cameraView);
 		frameLayout.addView(edgeView);
 		setContentView(frameLayout);
+		
+		// Prevent camera preview from showing up first
+		edgeView.postInvalidate();
 	}
 
 	@Override
